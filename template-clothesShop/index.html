@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang chủ</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <!--angularjs route-->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-route.js"
+      type="text/javascript"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
+  </head>
+
+  <body ng-app="indexApp" ng-controller="myControl">
+    <ng-view></ng-view>
+  </body>
+  <script>
+    let localhost = "http://localhost:8080/api/v1/user/";
+    let urlAdmin = "http://localhost:8080/api/v1/admin/";
+    let urlImages = `https://firebasestorage.googleapis.com/v0/b/clothesshop-1e4f2.appspot.com/o`;
+    let app = angular.module(
+      "indexApp",
+      ["ngRoute"],
+      [
+        "$httpProvider",
+        function ($httpProvider) {
+          $httpProvider.interceptors.push([
+            "$rootScope",
+            "$q",
+            function ($rootScope, $q) {
+              return {
+                responseError: function (response) {
+                  var status = response.status;
+                  // Skip for response with code 422 (as asked in the comment)
+                  if (status != 422) {
+                    var routes = { 403: "/login", 500: "server-error" };
+                    $rootScope.$broadcast("ajaxError", {
+                      template: routes[status],
+                    });
+                  }
+
+                  return $q.reject(response);
+                },
+              };
+            },
+          ]);
+        },
+      ]
+    );
+
+    
+
+    angular.element(document).ready(function () {
+      load_js(
+        "https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js",
+        "on"
+      );
+      load_js("assets/js/slick.min.js", "on");
+      load_js("assets/js/wow.min.js", "on");
+      load_js("assets/js/jquery.scrollup.min.js", "on");
+      load_js("assets/js/images-loaded.min.js", "on");
+      load_js("assets/js/isotope.pkgd.min.js", "on");
+      load_js("assets/js/tippy-bundle.umd.js", "on");
+      load_js("assets/js/jquery-ui.min.js", "on");
+      load_js("assets/js/mailchimp-ajax.js", "on");
+      load_js("assets/js/main.js", "on");
+      load_js("assets/js/jquery.instagramFeed.min.js", "on");
+      load_js("assets/js/jquery.magnific-popup.min.js", "on");
+    });
+  </script>
+  <script src="assets/angularjs/home.js"></script>
+  <script src="assets/angularjs/mainpr.js"></script>
+  <script src="assets/angularjs/cart.js"></script>
+  <script src="assets/angularjs/shop.js"></script>
+  <script src="assets/angularjs/authentication.js"></script>
+  <script src="assets/angularjs/productDetail.js"></script>
+  <script src="assets/js/vendor/jquery-3.4.1.min.js"></script>
+  <script src="assets/js/jquery-ui.min.js"></script>
+  <script src="assets/js/vendor/popper.js"></script>
+  <script src="assets/js/vendor/bootstrap.min.js"></script>
+  <script src="assets/js/vendor/modernizr-3.7.1.min.js"></script>
+  <script src="assets/js/slider.js"></script>
+  <script src="assets/angularjs/authorization.js"></script>
+  
+</html>
